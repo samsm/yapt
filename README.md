@@ -1,24 +1,19 @@
 # Yapt
 
-TODO: Write a gem description
+A command line Pivotal Tracker client. In early days.
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'yapt'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install yapt
 
 ## Usage
 
-TODO: Write usage instructions here
+Environment variables: 
+
+* api_token
+* project_id
+
+yapt list "created_since=last friday" limit=5 keyword
 
 ## Contributing
 

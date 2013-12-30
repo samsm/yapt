@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Yapt::VERSION
   spec.authors       = ["Sam Schenkman-Moore"]
   spec.email         = ["samsm@samsm.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{A command line app for navigating Pivotal Tracker. WIP}
+  spec.summary       = %q{Command line pivotal tracker thing. WIP}
   spec.homepage      = ""
   spec.license       = "MIT"
 
