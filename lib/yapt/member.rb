@@ -20,9 +20,11 @@ module Yapt
     end
 
     def self.cache
-      cache = YAML.load_file(Yapt.tracker_member_cache)
-      puts "Cache expiration in #{cache[:expires_at] - Time.now} seconds"
-      cache[:expires_at] > Time.now ? cache : generate_cache
+      if File.exists?(Yapt.tracker_member_cache)
+        cache = YAML.load_file(Yapt.tracker_member_cache)
+      end
+      expires_at = cache ? cache[:expires_at] : Time.new(0)
+      expires_at > Time.now ? cache : generate_cache
     end
 
     def self.generate_cache

@@ -18,7 +18,7 @@ module Yapt
   end
 
   def self.cache_duration
-    @cache_validity_duration ||= ENV['yapt_cache_validity_duration'] || 3600
+    3600
   end
 
   def self.tracker_member_cache
