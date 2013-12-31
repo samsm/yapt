@@ -1,6 +1,3 @@
-require 'dotenv'
-Dotenv.load
-
 module Yapt
   autoload :VERSION, "yapt/version"
   autoload :Story, "yapt/story"
@@ -8,13 +5,18 @@ module Yapt
   autoload :View, "yapt/view"
   autoload :Member, "yapt/member"
   autoload :Request, "yapt/request"
+  autoload :Config, "yapt/config"
+
+  def self.config
+    @config ||= Config.new(Dir.pwd)
+  end
 
   def self.project_id
-    @project_id ||= ENV['project_id']
+    config.project_id
   end
 
   def self.api_token
-    @api_token ||= ENV['api_token']
+    config.api_token
   end
 
   def self.cache_duration
