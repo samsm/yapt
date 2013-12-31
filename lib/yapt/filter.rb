@@ -1,4 +1,3 @@
-require 'pry'
 require "chronic"
 
 module Yapt
@@ -6,7 +5,6 @@ module Yapt
     def self.parse(args)
       args.inject({filter: ""}) do |query, arg|
         filter = new(arg)
-        # binding.pry
         if filter.filter?
           query[:filter] += "#{filter.to_filter} "
         else

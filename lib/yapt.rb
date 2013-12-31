@@ -32,24 +32,45 @@ module Yapt
   end
 
   class Runner < Boson::Runner
-    # option :urgent, type: :boolean
+    attr_reader :start_time
+    def initialize
+      @start_time = Time.now
+      super
+    end
+
     def list(*args)
       display_config = View.extract_display_config(args)
-      start_time = Time.now
       @stories = Story.find(args)
+      display_config ||= (@stories.length > 1) ? "simple" : "detail"
+      output View.new(@stories).display(display_config)
+    end
+
+    def show(id)
+      @story = Story.find(id)
+      output View.new([@story]).display("detail")
+    end
+
+    def open(id = nil)
+     system_open Story.just_url(id)
+    end
+
+    def images(id)
+      system_open Story.images_url(id)
+    end
+
+    private
+
+    def system_open(whatever)
+      puts "Opening: #{whatever}"
+      system "open #{whatever}"
+    end
+
+    def output(str)
       puts
-      puts View.new(@stories).display(display_config)
+      puts str
       puts
       puts "Took #{Time.now - start_time} seconds."
       puts
-    end
-
-    def members
-      Member.cache
-    end
-
-    def moo
-      puts "MOOOO"
     end
   end
 end

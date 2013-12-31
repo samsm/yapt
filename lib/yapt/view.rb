@@ -5,7 +5,7 @@ module Yapt
     def self.extract_display_config(args)
       display = args.detect {|a| a =~ /\Av(iew)?[=:]/ }
       args.delete(display)
-      display ? display.split(/[=:]/).last : "simple"
+      display ? display.split(/[=:]/).last : nil
     end
 
     def initialize(stories)

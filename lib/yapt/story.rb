@@ -1,9 +1,26 @@
 module Yapt
   class Story
     def self.find(options = ["limit=5"])
+      return find_one(options) if options.kind_of?(String)
       params = Filter.parse(options)
       results = Request.new("stories", params, :get).result
       results.collect {|r| new(r) }
+    end
+
+    def self.find_one(id)
+      new(Request.new("stories/#{id}", {}, :get).result)
+    end
+
+    def self.just_url(id)
+      if id
+        "https://www.pivotaltracker.com/s/projects/#{Yapt.project_id}/stories/#{id}"
+      else
+        "https://www.pivotaltracker.com/s/projects/#{Yapt.project_id}"
+      end
+    end
+
+    def self.images_url(id)
+      "https://www.pivotaltracker.com/projects/#{Yapt.project_id}/stories/#{id}/images"
     end
 
     attr_reader :raw_story
