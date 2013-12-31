@@ -15,6 +15,11 @@ Put these in a yaml .yapt file in your project or ~ directory:
 
 yapt list "created_since=last friday" limit=5 keyword
 
+Use a different template with v(iew)=
+
+yapt list v=detail
+yapt list view=simple
+
 ## Contributing
 
 1. Fork it

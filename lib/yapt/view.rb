@@ -1,75 +1,29 @@
-require "ostruct"
+require 'erb'
 
 module Yapt
   class View
-    extend Forwardable
-
-    def_delegators :@story, :url, :story_type, :description, :id,
-      :current_state, :labels, :owned_by_id, :created_at, :kind,
-      :project_id, :requested_by_id, :updated_at, :name
-
-    def self.headline(str)
-      "About to display: #{str}"
+    def self.extract_display_config(args)
+      display = args.detect {|a| a =~ /\Av(iew)?[=:]/ }
+      args.delete(display)
+      display ? display.split(/[=:]/).last : "simple"
     end
 
-    def self.display(stories)
-      stories.inject("") do |str, story|
-        str + new(story).to_s
-      end
+    def initialize(stories)
+      @stories = stories
     end
 
-    attr_reader :story
-    def initialize(story)
-      @story = OpenStruct.new(story)
-    end
-
-    def to_s
-      [:id, :story_type, :current_state, :name, :nl,
-       :created_at_display, :updated_at_display,
-       :owner_initials, :requester_initials,
-       :nl, :nl
-      ].inject("") do |str, element|
-        str += "#{send(element)}"
-        element == :nl ? str : "#{str} | "
-      end.gsub(/\| $/, '')
-    end
-
-    private
-
-    def owner_initials
-      if owned_by_id
-        "Owner: #{Member.find(owned_by_id).initials}"
+    def display(template_name)
+      template_path = "#{template_dir}/#{template_name}.erb"
+      if File.exists?(template_path)
+        template = IO.read template_path
+        ERB.new(template, 0, '-').result(binding)
       else
-        "No owner"
+        raise "#{template_path} missing!"
       end
     end
 
-    def requester_initials
-      "Requester: #{Member.find(requested_by_id).initials}"
-    end
-
-    def created_at_display
-      "Created: #{time_display(created_at)}"
-    end
-
-    def updated_at_display
-      "Updated: #{time_display(updated_at)}"
-    end
-
-    def time_display(time)
-      Time.parse(time).strftime("%a %d%b %I:%M")
-    end
-
-    def id_name
-      "#{story.id} | #{story.name}\n"
-    end
-
-    def nl
-      "\n"
+    def template_dir
+      "#{File.dirname(__FILE__)}/templates"
     end
   end
 end
-# ["url", "story_type", "description", "id", "current_state",
- # "labels", "owned_by_id", "created_at", "kind", "project_id",
- # "requested_by_id", "updated_at", "name"]
-

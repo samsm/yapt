@@ -34,10 +34,14 @@ module Yapt
   class Runner < Boson::Runner
     # option :urgent, type: :boolean
     def list(*args)
+      display_config = View.extract_display_config(args)
+      start_time = Time.now
+      @stories = Story.find(args)
       puts
-      puts Story.find(args)
+      puts View.new(@stories).display(display_config)
       puts
-      puts args.inspect
+      puts "Took #{Time.now - start_time} seconds."
+      puts
     end
 
     def members

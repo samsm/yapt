@@ -1,0 +1,11 @@
+<% @stories.each do |story| -%>
+<%= story.id %>  | <%= story.name %>
+<%= story.description %>
+<%= story.created_at_display %> | <%= story.updated_at_display %> | <%= story.current_state %> | <%= story.requester_initials %> | <%= story.owner_initials %>
+<%= '-' * 100 %>
+<% end %>
+<% if false %>
+  [:url, :story_type, :description, :id,
+   :current_state, :labels, :owned_by_id, :created_at, :kind,
+   :project_id, :requested_by_id, :updated_at, :name].each do |attr|
+ <% end %>
