@@ -8,7 +8,7 @@ A command line Pivotal Tracker client. In early days.
 
 ## Usage
 
-Environment variables: 
+Put these in a yaml .yapt file in your project or ~ directory:
 
 * api_token
 * project_id
