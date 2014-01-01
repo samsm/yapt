@@ -3,7 +3,11 @@ require "yaml"
 module Yapt
   class Member
     def self.find(id)
-      new all.detect {|u| u["person"]["id"] == id }
+      new (all.detect {|u| u["person"]["id"] == id } || inactive_user)
+    end
+
+    def self.inactive_user
+      { "person" => { "initials" => '???' } }
     end
 
     attr_reader :membership
