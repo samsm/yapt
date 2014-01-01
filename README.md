@@ -17,8 +17,25 @@ yapt list "created_since=last friday" limit=5 keyword
 
 Use a different template with v(iew)=
 
+```
 yapt list v=detail
 yapt list view=simple
+```
+
+Check out an individual story...
+
+```
+yapt show 12345
+```
+
+Move it ...
+
+```
+yapt move 12345 54321 # move 12345 just above 54321
+yapt move 12345 tback # move 12345 to top of backlog
+```
+
+Other keywords: ticebox, tice, bback, tbacklog, bice, bicebox
 
 ## Contributing
 
