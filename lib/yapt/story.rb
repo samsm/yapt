@@ -8,19 +8,54 @@ module Yapt
     end
 
     def self.find_one(id)
+      case id
+      when /\A\d+\Z/  then find_by_id(id)
+      when 'tback'    then top_of_backlog
+      when 'tbacklog' then top_of_backlog
+      when 'tice'     then top_of_icebox
+      when 'ticebox'  then top_of_icebox
+
+      when 'bback'    then bottom_of_backlog
+      when 'bbacklog' then bottom_of_backlog
+      when 'bice'     then bottom_of_icebox
+      when 'bicebox'  then bottom_of_icebox
+      end
+    end
+
+    def self.find_by_id(id)
       new(Request.new("stories/#{id}", {}, :get).result)
+    end
+
+    def self.top_of_backlog
+      find(["state:unstarted", "limit:1"]).first
+    end
+
+    def self.top_of_icebox
+      find(["state:unscheduled", "limit:1"]).first
+    end
+
+    def self.bottom_of_backlog
+      find(["state:unstarted"]).last
+    end
+
+    def self.bottom_of_icebox
+      find(["state:unscheduled"]).last
     end
 
     def self.just_url(id)
       if id
-        "https://www.pivotaltracker.com/s/projects/#{Yapt.project_id}/stories/#{id}"
+        "#{base_site_url}/stories/#{id}"
       else
-        "https://www.pivotaltracker.com/s/projects/#{Yapt.project_id}"
+        base_site_url
       end
     end
 
     def self.images_url(id)
-      "https://www.pivotaltracker.com/projects/#{Yapt.project_id}/stories/#{id}/images"
+      "#{just_url(id)}/images"
+    end
+
+    def self.base_site_url
+      "https://www.pivotaltracker.com/s/projects/#{Yapt.project_id}"
     end
 
     attr_reader :raw_story

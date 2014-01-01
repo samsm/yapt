@@ -1,3 +1,6 @@
+require 'pry'
+require 'highline/import'
+
 module Yapt
   autoload :VERSION, "yapt/version"
   autoload :Story, "yapt/story"
@@ -6,6 +9,7 @@ module Yapt
   autoload :Member, "yapt/member"
   autoload :Request, "yapt/request"
   autoload :Config, "yapt/config"
+  autoload :Move, "yapt/move"
 
   def self.config
     @config ||= Config.new(Dir.pwd)
@@ -56,6 +60,21 @@ module Yapt
 
     def images(id)
       system_open Story.images_url(id)
+    end
+
+    def move(id, destination)
+      mover = Move.setup(id, destination)
+      puts
+      puts mover.description
+      puts View.new([mover.to_move, mover.target]).display("simple")
+
+      permission = ask("Make this move?  ").downcase
+      if %w(y yes).include?(permission)
+        mover.execute!
+        puts "Moved!"
+      else
+        puts "Aborted. Oh well."
+      end
     end
 
     private
