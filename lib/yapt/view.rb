@@ -1,4 +1,5 @@
 require 'erb'
+require 'rainbow'
 
 module Yapt
   class View

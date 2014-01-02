@@ -1,11 +1,13 @@
 <% @stories.each do |story| -%>
-<%= story.id %>  | <%= story.name %>
+<%= Rainbow(story.id).bright.color("0C2233") %> | <%= Rainbow(story.name).bright.color("065471") %>
 <%= story.description %>
-<%= '-' * 100 %>
+<% if story.comments.any? -%>
+<%= Rainbow('-' * 100).color("0A91AB") %>
 <% story.comments.each_with_index do |comment, i| -%>
 <%= i+1 %>. <%= comment.commenter.initials %>: <%= comment.text %>
 <% end %>
-<%= '-' * 100 %>
+<% end %>
+<%= Rainbow('-' * 100).color("0A91AB") %>
 <%= story.created_at_display %> | <%= story.updated_at_display %> | <%= story.current_state %> | <%= story.requester_initials %> | <%= story.owner_initials %>
-<%= '=' * 100 %>
+<%= Rainbow('=' * 100).color("065471") %>
 <% end %>
