@@ -55,7 +55,7 @@ module Yapt
     end
 
     def self.base_site_url
-      "https://www.pivotaltracker.com/s/projects/#{Yapt.project_id}"
+      "https://www.pivotaltracker.com/projects/#{Yapt.project_id}"
     end
 
     attr_reader :raw_story
@@ -69,6 +69,10 @@ module Yapt
        define_method attr do
          raw_story[attr.to_s]
        end
+    end
+
+    def has_image?
+      Request.new("stories/", {filter: "id:#{id} has:attachment"}, :get).result.any?
     end
 
     def comments
