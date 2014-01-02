@@ -2,11 +2,10 @@
 <%= story.id %>  | <%= story.name %>
 <%= story.description %>
 <%= '-' * 100 %>
+<% story.comments.each_with_index do |comment, i| -%>
+<%= i+1 %>. <%= comment.commenter.initials %>: <%= comment.text %>
+<% end %>
+<%= '-' * 100 %>
 <%= story.created_at_display %> | <%= story.updated_at_display %> | <%= story.current_state %> | <%= story.requester_initials %> | <%= story.owner_initials %>
 <%= '=' * 100 %>
 <% end %>
-<% if false %>
-  [:url, :story_type, :description, :id,
-   :current_state, :labels, :owned_by_id, :created_at, :kind,
-   :project_id, :requested_by_id, :updated_at, :name].each do |attr|
- <% end %>

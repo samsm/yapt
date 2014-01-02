@@ -71,6 +71,10 @@ module Yapt
        end
     end
 
+    def comments
+      @comments ||= Comment.find(id)
+    end
+
     def owner_initials
       if owned_by_id
         "Owner: #{Member.find(owned_by_id).initials}"

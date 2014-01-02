@@ -10,6 +10,7 @@ module Yapt
   autoload :Request, "yapt/request"
   autoload :Config, "yapt/config"
   autoload :Move, "yapt/move"
+  autoload :Comment, "yapt/comment"
 
   def self.config
     @config ||= Config.new(Dir.pwd)
