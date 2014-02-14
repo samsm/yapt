@@ -7,12 +7,10 @@ module Yapt
       @project_path = project_path
     end
 
-    def project_id
-      config.fetch('project_id')
-    end
-
-    def api_token
-      config.fetch('api_token')
+    %w(project_id api_token github_url_base).each do |attr|
+      define_method attr do
+        config.fetch(attr)
+      end
     end
 
     private

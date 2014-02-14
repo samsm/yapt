@@ -24,6 +24,10 @@ module Yapt
     config.api_token
   end
 
+  def self.github_url_base
+    config.github_url_base
+  end
+
   def self.cache_duration
     3600
   end
@@ -36,11 +40,54 @@ module Yapt
     Member.find(id)
   end
 
+  class GitLogShiv
+    def self.find(since_until)
+      result = `git log #{since_until}`
+      commits = result.split(/^commit/).reverse.collect {|c| "commit#{c}" }
+      commits.pop if commits.last == 'commit'
+      commits.collect {|c| new(c) }
+    end
+
+    attr_reader :sha, :author, :tracker_ids, :message
+    def initialize(message)
+      lines = message.split("\n")
+      @sha = lines.first[/\w+$/].strip
+      author_line = lines[1]
+      @author = author_line[/:[^<]+/].sub(/\A:/,'').strip
+      just_message = lines[3..-1].join("\n")
+      tracker_directives = just_message.scan(/\[.*\d+\]/)
+      @tracker_ids = []
+      tracker_directives.each do |directive|
+        @tracker_ids << directive[/\d+/]
+        just_message.gsub!(directive,'')
+      end
+      @message = just_message.strip
+    end
+
+    def github_link
+      "#{Yapt.github_url_base}/commit/#{sha}"
+    end
+
+    def display
+      output = ''
+      tracker_ids.each do |id|
+        story = Story.find(id)
+        output << View.new([story]).display("for_git_display").strip + "\n"
+      end
+      output << "Git commit:\n  #{message} by #{author}\n  #{github_link}\n\n"
+      output
+    end
+  end
+
   class Runner < Boson::Runner
     attr_reader :start_time
     def initialize
       @start_time = Time.now
       super
+    end
+
+    def git(since_until)
+      output GitLogShiv.find(since_until).collect(&:display)
     end
 
     def list(*args)
