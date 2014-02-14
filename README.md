@@ -37,6 +37,12 @@ yapt move 12345 tback # move 12345 to top of backlog
 
 Other keywords: ticebox, tice, bback, tbacklog, bice, bicebox
 
+## Git story listing
+
+Add github_url_base to your .yapt file. A url, like: https://github.com/samsm/yapt
+
+yapt git d4cb7b2...fdf6796
+
 ## Contributing
 
 1. Fork it
