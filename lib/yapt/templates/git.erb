@@ -1,0 +1,10 @@
+<% @commit.each do |commit| -%>
+<% commit.stories.each do |story| %>
+Tracker Story:
+  <%= story.name %>
+  <%= story.url %>
+<% end %>
+Git commit:
+  <%= commit.message %> by <%= commit.author %>
+  <%= commit.github_link %>
+<% end %>

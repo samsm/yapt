@@ -11,6 +11,7 @@ module Yapt
   autoload :Config, "yapt/config"
   autoload :Move, "yapt/move"
   autoload :Comment, "yapt/comment"
+  autoload :GitView, "yapt/git_view"
 
   def self.config
     @config ||= Config.new(Dir.pwd)
@@ -68,14 +69,8 @@ module Yapt
       "#{Yapt.github_url_base}/commit/#{sha}"
     end
 
-    def display
-      output = ''
-      tracker_ids.each do |id|
-        story = Story.find(id)
-        output << View.new([story]).display("for_git_display").strip + "\n"
-      end
-      output << "Git commit:\n  #{message} by #{author}\n  #{github_link}\n\n"
-      output
+    def stories
+      @stories ||= tracker_ids.collect {|t| Story.find(t) }
     end
   end
 
@@ -87,7 +82,8 @@ module Yapt
     end
 
     def git(since_until)
-      output GitLogShiv.find(since_until).collect(&:display)
+      commits = GitLogShiv.find(since_until)
+      output GitView.new(commits).display("git")
     end
 
     def list(*args)
